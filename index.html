@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veggy Mart - ताज्या भाज्या 🥦</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Hind', sans-serif; background-color: #f0fdf4; }
+        .premium-card { border-radius: 30px; background: white; transition: 0.3s; border: 1px solid #dcfce7; }
+        .gradient-header { background: linear-gradient(135deg, #15803d 0%, #166534 100%); }
+    </style>
+</head>
+<body class="pb-40">
+
+    <!-- Language & Delivery -->
+    <div class="bg-yellow-300 px-4 py-2 flex justify-between items-center shadow-sm">
+        <div class="flex items-center gap-2">
+            <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-green-700"></span>
+            </span>
+            <p class="text-[11px] font-black uppercase text-green-900">तुमच्या भागात डिलिव्हरी सुरू आहे 🚚</p>
+        </div>
+        <select class="bg-white/70 text-[10px] font-bold px-3 py-1 rounded-full outline-none">
+            <option>मराठी 🚩</option>
+            <option>English 🔤</option>
+            <option>Hindi 🇮🇳</option>
+        </select>
+    </div>
+
+    <!-- Header -->
+    <header class="gradient-header text-white pt-8 pb-12 px-6 rounded-b-[50px] shadow-xl text-center">
+        <h1 class="text-4xl font-black italic text-yellow-300 tracking-tighter">VEGGY MART 🥗</h1>
+        <p class="mt-2 text-xs font-bold opacity-90">शुद्ध शाकाहारी, शेतातून थेट तुमच्या घरी! 🚜</p>
+    </header>
+
+    <!-- Bachat Combo Section -->
+    <div class="px-6 -mt-8 relative z-10">
+        <h2 class="text-sm font-black text-gray-800 mb-4 flex items-center gap-2">
+            ✨ विशेष बचत कॉम्बो 🔥
+        </h2>
+        <div class="flex overflow-x-auto gap-4 no-scrollbar pb-2">
+            <div class="min-w-[280px] premium-card p-5 shadow-xl border-2 border-green-200">
+                <img src="1000391944.jpg" class="h-32 w-full object-cover rounded-2xl mb-4 shadow-md" onerror="this.src='https://via.placeholder.com/200?text=Daily+Tadka'">
+                <h4 class="font-black text-gray-800 text-lg">Daily Tadka Mix 🥘</h4>
+                <p class="text-[11px] text-gray-500 mb-3">टोमॅटो + मिरची + बटाटा + कोथिंबीर</p>
+                
+                <select onchange="updateCombo(this.value)" class="w-full bg-green-50 border-2 border-green-200 text-sm font-black p-3 rounded-2xl outline-none mb-3">
+                    <option value="">किती किलो हवे? 🛒</option>
+                    <option value="0.5">अर्धा किलो - ₹60</option>
+                    <option value="1">१ किलो - ₹120</option>
+                    <option value="2">२ किलो - ₹240</option>
+                </select>
+                
+                <div class="flex justify-between items-center">
+                    <span id="combo-price" class="text-xl font-black text-green-700">₹0</span>
+                    <span id="combo-tag" class="hidden bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-black italic">Added ✅</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Vegetables -->
+    <div class="px-6 mt-10">
+        <h2 class="text-sm font-black text-gray-800 mb-6 uppercase tracking-widest">ताजी भाजी निवडा 🥦</h2>
+        <div id="product-list" class="space-y-4">
+            <!-- Products injected by JS -->
+        </div>
+    </div>
+
+    <!-- Floating Bill Footer -->
+    <div id="bill-footer" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md p-6 rounded-t-[45px] shadow-[0_-15px_40px_rgba(0,0,0,0.15)] z-50 transition-transform duration-500 translate-y-full border-t-2 border-green-100">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <div>
+                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">एकूण बिल 💰</p>
+                <p id="total-amount" class="text-3xl font-black text-green-700 leading-none">₹0</p>
+            </div>
+            <button onclick="openModal()" class="bg-green-600 text-white px-10 py-4 rounded-3xl font-black text-sm shadow-lg active:scale-95 transition-all">
+                ऑर्डर करा 🛍️
+            </button>
+        </div>
+    </div>
+
+    <!-- Address Modal -->
+    <div id="orderModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
+        <div class="bg-white w-full max-w-sm rounded-[45px] p-8 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-green-500"></div>
+            <h2 class="text-lg font-black text-green-800 mb-2 text-center mt-2">आम्ही तुमची ऑर्डर लवकरच पोहोचवू 🚚</h2>
+            <p class="text-center text-gray-400 text-[11px] mb-6 font-bold uppercase tracking-widest">कृपया पत्ता भरा</p>
+            
+            <div class="space-y-4">
+                <input type="text" id="custName" placeholder="तुमचे नाव 👤" class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl font-bold focus:border-green-500 outline-none">
+                <input type="tel" id="custMobile" placeholder="मोबाईल नंबर 📱" class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl font-bold focus:border-green-500 outline-none">
+                <textarea id="custAddr" placeholder="पूर्ण पत्ता (घर क्र, गल्ली) 📍" class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl font-bold h-24 focus:border-green-500 outline-none"></textarea>
+                
+                <button onclick="confirmOrder()" class="w-full bg-green-700 text-white py-5 rounded-3xl font-black text-lg shadow-xl hover:bg-green-800 transition-all">WhatsApp वर पाठवा 🚀</button>
+                <button onclick="closeModal()" class="w-full text-gray-400 font-bold py-2 text-xs uppercase tracking-widest">मागे जा</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            { id: 1, name: "बटाटा 🥔", price: 40, unit: "किलो", type: "weight" },
+            { id: 2, name: "टोमॅटो 🍅", price: 50, unit: "किलो", type: "weight" },
+            { id: 3, name: "हिरवी मिरची 🌶️", price: 50, unit: "किलो", type: "weight" },
+            { id: 4, name: "भेंडी 🥒", price: 30, unit: "किलो", type: "weight" },
+            { id: 5, name: "वांगे (Brinjal) 🍆", price: 40, unit: "किलो", type: "weight" },
+            { id: 6, name: "कोबी (Cabbage) 🥬", price: 30, unit: "किलो", type: "weight" },
+            { id: 7, name: "गड्डा (Flower) 🥦", price: 20, unit: "गड्डा", type: "gadda" },
+            { id: 8, name: "मेथी 🌱", price: 10, unit: "जुडी", type: "judi" },
+            { id: 9, name: "कोथिंबीर 🌿", price: 10, unit: "जुडी", type: "judi" }
+        ];
+
+        let cart = {};
+
+        function render() {
+            const list = document.getElementById('product-list');
+            list.innerHTML = products.map(p => `
+                <div class="premium-card p-5 flex justify-between items-center shadow-md">
+                    <div>
+                        <h3 class="text-lg font-black text-gray-800">${p.name}</h3>
+                        <p class="text-xs text-green-600 font-bold">₹${p.price} / ${p.unit}</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <select onchange="handleCart(${p.id}, this.value, '${p.name}', ${p.price})" 
+                            class="bg-gray-50 border-2 border-gray-100 text-[12px] font-black px-4 py-2 rounded-xl outline-none focus:border-green-500">
+                            <option value="">निवडा 🛒</option>
+                            ${p.type === 'weight' ? `
+                                <option value="0.25">पावशेर (250g)</option>
+                                <option value="0.5">अर्धा किलो (500g)</option>
+                                <option value="1">१ किलो</option>
+                            ` : `
+                                <option value="1">१ ${p.unit}</option>
+                                <option value="2">२ ${p.unit}</option>
+                                <option value="3">३ ${p.unit}</option>
+                            `}
+                        </select>
+                        <span id="ok-${p.id}" class="hidden text-green-600 font-bold">✅</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateCombo(val) {
+            const id = 'combo1';
+            if (!val) {
+                delete cart[id];
+                document.getElementById('combo-price').innerText = "₹0";
+                document.getElementById('combo-tag').classList.add('hidden');
+            } else {
+                const finalP = 120 * parseFloat(val);
+                cart[id] = { name: "Daily Tadka Mix 🥘", label: val + " किलो", total: finalP };
+                document.getElementById('combo-price').innerText = "₹" + finalP;
+                document.getElementById('combo-tag').classList.remove('hidden');
+            }
+            updateTotal();
+        }
+
+        function handleCart(id, val, name, price) {
+            if (!val) {
+                delete cart[id];
+                document.getElementById(`ok-${id}`).classList.add('hidden');
+            } else {
+                const qty = parseFloat(val);
+                const unitName = products.find(x => x.id === id).unit;
+                const label = qty < 1 && unitName === 'किलो' ? (qty * 1000) + "g" : qty + " " + unitName;
+                cart[id] = { name: name, label: label, total: Math.round(price * qty) };
+                document.getElementById(`ok-${id}`).classList.remove('hidden');
+            }
+            updateTotal();
+        }
+
+        function updateTotal() {
+            let total = 0;
+            for (let k in cart) total += cart[k].total;
+            document.getElementById('total-amount').innerText = "₹" + total;
+            const footer = document.getElementById('bill-footer');
+            if (total > 0) footer.classList.remove('translate-y-full');
+            else footer.classList.add('translate-y-full');
+        }
+
+        function openModal() { document.getElementById('orderModal').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('orderModal').classList.add('hidden'); }
+
+        function confirmOrder() {
+            const n = document.getElementById('custName').value;
+            const m = document.getElementById('custMobile').value;
+            const a = document.getElementById('custAddr').value;
+            if(!n || !m || !a) return alert("कृपया माहिती पूर्ण भरा! 🙏");
+
+            let msg = `*🥦 VEGGY MART ORDER 🥦*%0A--------------------------%0A*ग्राहक:* ${n}%0A*मोबाईल:* ${m}%0A*पत्त्ता:* ${a}%0A--------------------------%0A%0A`;
+            for(let id in cart) msg += `✅ *${cart[id].name}* (${cart[id].label}) - ₹${cart[id].total}%0A`;
+            msg += `%0A*एकूण बिल: ${document.getElementById('total-amount').innerText}*%0A%0A_आम्ही तुमची ऑर्डर लवकरच पोहोचवू! 🚚_`;
+            window.open(`https://wa.me/917385533059?text=${msg}`);
+        }
+
+        render();
+    </script>
+</body>
+  </html>
+          
